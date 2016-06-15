@@ -56,9 +56,6 @@ async def on_message(message):
             else:
                 duckPlural = "duck"
             await client.send_message(message.channel, message.author.mention + " you shot a duck in " + timeToKill + " seconds! You have killed " + str(currentKills) + " " + duckPlural + " in the /r/worldbuilding server!")
-        else:
-            await client.send_message(message.channel, "There is no duck! What are you shooting at?")
-        client.send_message(message.channel, "got it")
         return
     if message.content.startswith('.bef'):
         if duckActive == True:
@@ -70,8 +67,6 @@ async def on_message(message):
             else:
                 duckPlural = "duck"
             await client.send_message(message.channel, message.author.mention + " you befriended a duck in " + timeToKill + " seconds! You made friends with " + str(currentKills) + " " + duckPlural + " in the /r/worldbuilding server!")
-        else:
-            await client.send_message(message.channel, "You tried befriending a non-existent duck, that's fucking creepy.")
         return
     with open(currentDirectory + "logpruned.txt", "a", encoding="utf8") as myfile:
         myfile.write(message.content + '. ')
@@ -129,7 +124,7 @@ async def duck_hunt():
     global duckShowTime
     duckActive = False
     while not client.is_closed:
-        await asyncio.sleep(randint(600,2400))
+        await asyncio.sleep(randint(1800,3000))
         duckActive = True
         duckChannel = random.choice(channel_ids)
         channel = discord.Object(id=duckChannel)
@@ -165,7 +160,7 @@ loop = asyncio.get_event_loop()
 try:
     loop.create_task(duck_hunt())
     loop.create_task(sub_tracker())
-    loop.run_until_complete(client.login(''))
+    loop.run_until_complete(client.login('MTg5OTIyOTY0MzEyMDMxMjMy.CjkPCw.pH9zDweCESats8dbX0cULd65GrI'))
     loop.run_until_complete(client.connect())
 except Exception:
     loop.run_until_complete(client.close())
