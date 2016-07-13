@@ -96,10 +96,10 @@ def add_kills(authorID, authorNick):
         data = dict(id = user['id'], total_kills = new_points, current_name = authorNick)
         table.update(data, ['id'])
         user = table.find_one(username = authorID)
-        return user['total_kills']
     else:
         table.insert(dict(username = authorID, total_kills = 1, total_friends = 0, current_name = authorNick))
-        return 1
+        user = table.find_one(username = authorID)
+    return user['total_kills']
 
 def add_friends(authorID, authorNick):
     user = table.find_one(username = authorID)
@@ -108,10 +108,10 @@ def add_friends(authorID, authorNick):
         data = dict(id = user['id'], total_friends = new_points, current_name = authorNick)
         table.update(data, ['id'])
         user = table.find_one(username = authorID)
-        return user['total_friends']
     else:
         table.insert(dict(username = authorID, total_kills = 0, total_friends = 1, current_name = authorNick))
-        return 1
+        user = table.find_one(username = authorID)
+    return user['total_friends']
 
 def get_duckkills():
     result = db.query('SELECT  * FROM users ORDER BY total_kills DESC LIMIT 5')
@@ -130,6 +130,10 @@ def get_duckfriends():
         duckFriendsPrintout = duckFriendsPrintout + str(i) + ". " + str(row['current_name'])[:-5] + ": " + str(row['total_friends']) + " "
         i = i + 1
     return duckFriendsPrintout
+
+def get_duckstats(authorID):
+    user = table.find_one(username = authorID)
+    #fuck it, I'll do it later
 
 #here's the duck hunt SHIT
 duck_tail = "・゜゜・。。・゜゜"
@@ -162,7 +166,7 @@ async def sub_tracker():
     db2 = dataset.connect('sqlite:///rss.db')
     table2 = db2['rss_posted']
     while not client.is_closed:
-        feed = feedparser.parse('https://www.reddit.com/r/worldbuilding+deepworldbuilding/new/.rss')
+        feed = feedparser.parse('https://www.reddit.com/r/worldbuilding+deepworldbuilding+worldjerking/new/.rss')
         try:
             latestLinkFull = feed["items"][0]["link"]
         except Exception:
@@ -172,6 +176,8 @@ async def sub_tracker():
             latestLink = feed["items"][0]["link"]
             if "DeepWorldbuilding" in latestLink:
                 latestSub = "/r/deepworldbuilding"
+            elif "worldjerking" in latestLink:
+                latestSub = "/r/worldjerking"
             else:
                 latestSub = "/r/worldbuilding"
             latestLink = latestLinkFull.split("/comments/",1)[1]
