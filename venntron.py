@@ -52,8 +52,13 @@ async def on_message(message):
     global duckShowTime
     authorID = str(message.author.id)
     authorNick = str(message.author)
+    duckrand = randint(1,100)
     if message.content.startswith('.bang'):
         if duckActive == True:
+#            if duckrand < 12:
+#                miss = "WHOOSH! You missed the duck completely!"
+#                await client.send_message(message.channel, miss)
+#                return
             duckActive = False
             timeToKill = "{:.3f}".format(time() - duckShowTime)
             currentKills = add_kills(authorID, authorNick)
@@ -65,6 +70,10 @@ async def on_message(message):
         return
     if message.content.startswith('.bef'):
         if duckActive == True:
+#            if duckrand < 12:
+#                miss = "The duck didn't want to be friends, maybe next time."
+#                await client.send_message(message.channel, miss)
+#                return
             duckActive = False
             timeToKill = "{:.3f}".format(time() - duckShowTime)
             currentKills = add_friends(authorID, authorNick)
@@ -195,7 +204,7 @@ loop = asyncio.get_event_loop()
 try:
     loop.create_task(duck_hunt())
     loop.create_task(sub_tracker())
-    loop.run_until_complete(client.login(''))
+    loop.run_until_complete(client.login('MTg5OTIyOTY0MzEyMDMxMjMy.Cmkxmg.QKBhZp_OVn3MUdA4i9TgGXhudOQ'))
     loop.run_until_complete(client.connect())
 except Exception:
     loop.run_until_complete(client.close())
